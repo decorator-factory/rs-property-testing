@@ -195,7 +195,14 @@ mod tests {
 
     #[test]
     fn associativity_works() {
-        let test = Test::new(100000, always(), |(x, y, z)| {
+        let are_finite =
+            when(|t: &(f64, f64, f64)| t.0.is_finite())
+            .and(|t| t.1.is_finite())
+            .and(|t| t.2.is_finite());
+        let test = Test::new(
+            100000,
+             are_finite,
+              |(x, y, z)| {
             let diff = ((x + y) + z) - (x + (y + z));
             diff < 0.000000000001
         });
